@@ -1,0 +1,31 @@
+[Unit]
+Description=adamserv dashboard native API and sole host publisher
+Conflicts=adamserv-collector.service adamserv-dashboard-dev-api.service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/homelab/dashboard/backend
+EnvironmentFile=-/srv/homelab/dashboard/config/monitoring.env
+Environment=DASHBOARD_METRICS_MODE=host
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/homelab/dashboard/backend/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8008 --no-access-log --no-proxy-headers
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateUsers=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/srv/homelab/dashboard/data
+ProtectHome=read-only
+# This user manager cannot drop the bounding set (218/CAPABILITIES).
+# UID 1000 starts with no effective/permitted/ambient capabilities; NNP prevents gain.
+AmbientCapabilities=
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+UMask=0077
+
+[Install]
+WantedBy=default.target

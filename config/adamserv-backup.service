@@ -1,0 +1,11 @@
+[Unit]
+Description=Back up and restore-check native adamserv dashboard project data
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/homelab/dashboard/backend
+EnvironmentFile=-/srv/homelab/dashboard/config/backup.env
+ExecStart=/srv/homelab/dashboard/backend/.venv/bin/python -m app.backup_job --source /srv/homelab/dashboard/data/tasks/tasks.sqlite3 --directory /srv/homelab/dashboard/data/backups --keep 30
+NoNewPrivileges=true
+UMask=0077
+TimeoutStartSec=240

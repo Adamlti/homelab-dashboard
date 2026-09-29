@@ -1,0 +1,71 @@
+{
+  "services": [
+    {
+      "id": "jellyfin",
+      "name": "Jellyfin",
+      "description": "Media library",
+      "url": "http://127.0.0.1:8096",
+      "check": {
+        "type": "http",
+        "url": "http://127.0.0.1:8096/health",
+        "expected_statuses": [
+          200
+        ],
+        "timeout_seconds": 2
+      }
+    },
+    {
+      "id": "pihole",
+      "name": "Pi-hole",
+      "description": "Network DNS filtering",
+      "url": "http://127.0.0.1/admin/",
+      "check": {
+        "type": "http",
+        "url": "http://127.0.0.1/admin/",
+        "expected_statuses": [
+          200,
+          302
+        ],
+        "timeout_seconds": 2
+      }
+    },
+    {
+      "id": "samba",
+      "name": "Samba",
+      "description": "LAN file sharing",
+      "url": null,
+      "check": {
+        "type": "tcp",
+        "host": "127.0.0.1",
+        "port": 445,
+        "timeout_seconds": 2
+      }
+    },
+    {
+      "id": "cockpit",
+      "name": "Cockpit",
+      "description": "Server administration",
+      "url": "https://127.0.0.1:9090",
+      "check": {
+        "type": "tcp",
+        "host": "127.0.0.1",
+        "port": 9090,
+        "timeout_seconds": 2
+      }
+    },
+    {
+      "id": "ssh",
+      "name": "SSH",
+      "description": "Secure shell access",
+      "url": null,
+      "check": {
+        "type": "ssh_local",
+        "host": "127.0.0.1",
+        "port": 22,
+        "timeout_seconds": 2
+      }
+    }
+  ],
+  "roadmap": [],
+  "tasks": []
+}

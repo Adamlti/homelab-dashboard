@@ -1,0 +1,30 @@
+[Unit]
+Description=adamserv dashboard production frontend and same-origin API proxy
+Conflicts=adamserv-dashboard-dev-web.service
+Wants=adamserv-dashboard-api.service
+After=adamserv-dashboard-api.service
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/homelab/dashboard/backend
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=DASHBOARD_FRONTEND_DIST=/srv/homelab/dashboard/frontend/releases/current
+ExecStart=/srv/homelab/dashboard/backend/.venv/bin/python -m uvicorn app.frontend:app --host 127.0.0.1 --port 5173 --no-access-log --no-proxy-headers
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateUsers=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+# This user manager cannot drop the bounding set (218/CAPABILITIES).
+# UID 1000 starts with no effective/permitted/ambient capabilities; NNP prevents gain.
+AmbientCapabilities=
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+UMask=0077
+
+[Install]
+WantedBy=default.target
